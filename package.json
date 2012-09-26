@@ -1,0 +1,19 @@
+{
+  "name": "replicated-reduce",
+  "version": "0.0.0",
+  "homepage": "https://github.com/dominictarr/replicated-reduce",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dominictarr/replicated-reduce.git"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "tap": "0.3.0"
+  },
+  "scripts": {
+    "test": "set -e; for t in ./test/*.js; do node $t; done; echo PASSED"
+  },
+  "author": "'Dominic Tarr' <dominic.tarr@gmail.com> (http://dominictarr.com)",
+  "license": "MIT"  
+}
