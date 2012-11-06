@@ -1,10 +1,10 @@
 {
-  "name": "replicated-reduce",
+  "name": "repred",
   "version": "0.0.0",
-  "homepage": "https://github.com/dominictarr/replicated-reduce",
+  "homepage": "https://github.com/dominictarr/repred",
   "repository": {
     "type": "git",
-    "url": "git://github.com/dominictarr/replicated-reduce.git"
+    "url": "git://github.com/dominictarr/repred.git"
   },
   "dependencies": {
   },

@@ -1,14 +1,15 @@
-
 var net = require('net')
 var serializer = require('stream-serializer')()
 var repred = require('../')
 
 function peer (address, initial) {
   var heartbeats = {}
+  console.log(address)
 
   var rr = repred(function () {
-    rr.id = [address.host, address.port].join(':')
+
     var c = {}
+    rr.id = [address.host, address.port].join(':')
     c[rr.id] = Date.now()
     return c
 
@@ -22,6 +23,7 @@ function peer (address, initial) {
     return change
 
   }, heartbeats)
+
   function onConnect (stream) {
     stream.pipe(serializer(rr.createStream())).pipe(stream)
     stream.on('error', console.log)
@@ -63,5 +65,11 @@ function peer (address, initial) {
 }
 
 if(!module.parent) {
-  peer({host: 'localhost', port: + process.argv[2]}, process.argv[3] && {host: 'localhost', port: process.argv[3]}) 
+  peer({
+    host: 'localhost', 
+    port: + process.argv[2] }, 
+    process.argv[3] && {
+      host: 'localhost', 
+      port: process.argv[3]
+    }) 
 }

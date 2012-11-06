@@ -31,12 +31,12 @@ module.exports = function (opts) {
     var remote = null
     
     d
-      .on('write', function (data) {
+      .on('_data', function (data) {
         if(!remote) return remote = data
         emitter._update(data, remote)
         //reduce should mutate current, and 
       })
-      .on('ended', function () {
+      .on('_end', function () {
         d.sendEnd()
       })
       .on('close', function () {
@@ -45,13 +45,16 @@ module.exports = function (opts) {
 
     function onUpdate(change, id) {
       if(id !== remote)
-        d.sendData(change)
+        d._data(change)
     }
 
     emitter.on('update', onUpdate)
     //duplex doesn't send any data until next tick
-    d.sendData(emitter.id)
-    d.sendData(emitter.collection)
+    //send what node this is.
+    d._data(emitter.id)
+
+    //send the current state.
+    d._data(emitter.collection)
     return d
   }
   emitter._update = function (data, id) {
