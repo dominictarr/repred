@@ -7,6 +7,7 @@
     "url": "git://github.com/dominictarr/repred.git"
   },
   "dependencies": {
+    "duplex": "~0.2.4"
   },
   "devDependencies": {
     "random-name": "*"
@@ -15,5 +16,5 @@
     "test": "set -e; for t in ./test/*.js; do node $t; done; echo PASSED"
   },
   "author": "'Dominic Tarr' <dominic.tarr@gmail.com> (http://dominictarr.com)",
-  "license": "MIT"  
+  "license": "MIT"
 }
