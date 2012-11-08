@@ -1,5 +1,6 @@
 var duplex = require('duplex')
 var EventEmitter = require('events').EventEmitter
+var serializer   = require('stream-serializer')
 
 function isEmpty (o) {
   if(null == o || null === false) return true
@@ -26,13 +27,15 @@ module.exports = function (opts) {
   emitter.setMaxListeners(Infinity)
   emitter.collection = initial
 
-  emitter.createStream = function () {
+  emitter.createStream = function (opts) {
     var d = duplex()
     var remote = null
+
+    serializer(opts && opts.wrapper)(d)
     
     d
       .on('_data', function (data) {
-        if(!remote) return remote = data
+        if(!remote) return console.log('REMOTE', remote = data)
         emitter._update(data, remote)
         //reduce should mutate current, and 
       })
@@ -55,6 +58,8 @@ module.exports = function (opts) {
 
     //send the current state.
     d._data(emitter.collection)
+
+    console.log(d.buffer)
     return d
   }
   emitter._update = function (data, id) {
