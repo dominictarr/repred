@@ -7,7 +7,8 @@
     "url": "git://github.com/dominictarr/repred.git"
   },
   "dependencies": {
-    "duplex": "~0.2.4"
+    "duplex": "~0.2.4",
+    "stream-serializer": "0.0.3"
   },
   "devDependencies": {
     "random-name": "*"
