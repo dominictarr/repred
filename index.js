@@ -63,6 +63,7 @@ module.exports = function (opts) {
     return d
   }
   emitter._update = function (data, id) {
+    if(data == null) return
     var change = reduce.call (emitter, emitter.collection, data)
     if(isEmpty(change)) return
     emitter.emit('update', change, id || emitter.id)
