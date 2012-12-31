@@ -2,11 +2,11 @@
 
 Insanely simple data replication.
 
-<img src=https://secure.travis-ci.org/'Dominic Tarr'/replicated-reduce.png?branch=master>
+<img src=https://secure.travis-ci.org/dominictarr/repred.png?branch=master>
 
 ## Example
 
-pass in a reduce like function that merges an update into the node's collection.
+Pass in a reduce like function that merges an update into the node's collection.
 
 ``` js
 var repred = require('repred')
@@ -21,8 +21,14 @@ var rr = repred(function (collect, update) {
     return change
   })
 }, [])
+
+//handle change events
+rr.on('update', console.log)
+//add a name to the set.
+rr.update('jim')
 ```
-the function must also return a change object, which is just the changes which actually applied.
+
+The function must also return a change object, which is just the changes which actually applied.
 if changes is non-empty, (not `[]` or `{}`) then that update will be sent across the wire to any 
 connected nodes.
 
@@ -38,27 +44,45 @@ rs2 = rr2.createStream()
 
 rs1.pipe(rs2).pipe(rs1)
 ```
-or, through a text stream...
+or, through a tcp stream...
 
 ``` js
-var serializer = require('stream-serializer')
 var net = require('net')
 
+//on server...
 var rr1 = reprep(...)
 
 net.createServer(function (stream) {
-  stream.pipe(
-    serializer(rr1.createStream())
-  ).pipe(stream)
+  stream.pipe(rr1.createStream()).pipe(stream)
 }).listen(PORT)
 
+//on client...
 var rr2 = reprep(...)
 
 var stream = net.connect(PORT)
-stream.pipe(
-    serializer(rr2.createStream)
-  ).pipe(stream)
+stream.pipe(rr2.createStream()).pipe(stream)
+```
 
+## map-reduce
+
+Optionally pass in a `map` function to transform update into the correct type.
+if the return value of the map is `nullish` (null or undefined) reduce will not be called.
+``` js
+
+var rr = reprep(function map (whatever) {
+    return whatever && whatever.name ? [whatever.name] : null
+  },
+  function reduce (acc, names) {
+    var changes = []
+    names.forEach(function (name) {
+      if(~acc.indexOf(name)) return
+      acc.push(name)
+      changes.push(name)
+    })
+    return changes
+  })
+
+rr.update({name: 'jim', phone: ...}) //etc.
 ```
 
 ## License
